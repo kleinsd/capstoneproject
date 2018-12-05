@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace SteamLibraryCapstoneProject
 {
@@ -15,11 +16,12 @@ namespace SteamLibraryCapstoneProject
         // time and money you have wasted.
         // Author: Devon Kleinschmit
         // Date Created: 11/28/2018
-        // Last Modified: 12/2/2018
+        // Last Modified: 12/4/2018
         //********************
 
         static void Main(string[] args)
         {
+
             DisplayOpeningScreen();
             DisplayMainMenu();
             DisplayClosingScreen();
@@ -27,6 +29,7 @@ namespace SteamLibraryCapstoneProject
 
         static void DisplayMainMenu()
         {
+            string dataPath = @"Data\DataFile1.txt";
             string menuChoice;
             bool exiting = false;
             List<SteamGame> steamGames = new List<SteamGame>();
@@ -38,6 +41,8 @@ namespace SteamLibraryCapstoneProject
                 Console.WriteLine("\tB) Add to The List");
                 Console.WriteLine("\tC) Delete a Steam Game");
                 Console.WriteLine("\tD) Display Detailed Info");
+                Console.WriteLine("\tE) Save List to File");
+                Console.WriteLine("\tF) Read List from File");
                 Console.WriteLine("");
                 Console.WriteLine("\tQ) Quit");
                 Console.WriteLine("");
@@ -65,6 +70,16 @@ namespace SteamLibraryCapstoneProject
                         DisplaySteamGameInfo(steamGames);
                         break;
 
+                    case "E":
+                    case "e":
+                        DisplayWriteToFile(steamGames, dataPath);
+                        break;
+
+                    case "F":
+                    case "f":
+                        DisplayReadFromFile(steamGames, dataPath);
+                        break;
+
                     case "Q":
                     case "q":
                         exiting = true;
@@ -76,11 +91,30 @@ namespace SteamLibraryCapstoneProject
             }
 
         }
+
+        static void DisplayReadFromFile(List<SteamGame> steamGames, string dataPath)
+        {
+            string dataInfo;
+            Console.Clear();
+            dataInfo = File.ReadAllText(dataPath);
+            Console.WriteLine(dataInfo);
+            DisplayContinuePrompt();
+        }
+
+        static void DisplayWriteToFile(List<SteamGame> steamGames, string dataPath)
+        {
+
+            Console.WriteLine("Writing to file.");
+            File.WriteAllText(dataPath, steamGames);
+            Console.WriteLine("Successful");
+
+            DisplayContinuePrompt();
+        }
+
         static void DisplaySteamGameInfo(List<SteamGame> steamGames)
         {
             DisplayHeader("In Depth Steam Game Info");
-
-
+            
             foreach (SteamGame steamGame in steamGames)
             {
                 Console.WriteLine(steamGame.Name);
@@ -95,16 +129,13 @@ namespace SteamLibraryCapstoneProject
             {
                 if (steamGame.Name == steamGameName)
                 {
-                    Console.WriteLine("Genre:" + steamGame.CurrentGameGenre);
-                    Console.WriteLine("Price : $" + steamGame.Price);
-                    Console.WriteLine("Hours played:" + steamGame.Hours);
+                    Console.WriteLine("Genre:" + steamGame.CurrentGameGenre.ToString().PadLeft(10));
+                    Console.WriteLine("Price:" + steamGame.Price.ToString("C").PadLeft(10));
+                    Console.WriteLine("Hours:" + steamGame.Hours.ToString().PadLeft(10));
                     found = true;
                     break;
                 }
             }
-            //
-            // CHECK FORMATTING ********
-            //
             if (!found)
             {
                 Console.WriteLine($"Unable to locate Steam Game named {steamGameName}.");
@@ -154,12 +185,17 @@ namespace SteamLibraryCapstoneProject
             Console.Write("Enter Name:");
             userSteamGame.Name = Console.ReadLine();
 
-            //
-            // list game genres so they know *****  ADD HERE
-            //
+            Console.WriteLine();
+            Console.WriteLine("Game Genres:");
+            foreach (string genreName in Enum.GetNames(typeof(SteamGame.GameGenre)))
+            {
+                if (genreName != SteamGame.GameGenre.unknown.ToString())
+                {
+                    Console.WriteLine(genreName);
+                }
+            }
 
             Console.WriteLine();
-
             Console.Write("Enter Genre:");
             Enum.TryParse(Console.ReadLine().ToLower(), out SteamGame.GameGenre genre);
             userSteamGame.CurrentGameGenre = genre;
