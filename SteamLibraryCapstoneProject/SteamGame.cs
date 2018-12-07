@@ -76,7 +76,7 @@ namespace SteamLibraryCapstoneProject
 
         public string SteamGameQuickDescription()
         {
-            return _name + " is " + "a " + _gamegenre + " genre of game.";
+            return _name + " is " + "a " + _gamegenre + ".";
 
             
         }

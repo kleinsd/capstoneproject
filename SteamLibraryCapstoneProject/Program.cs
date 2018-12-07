@@ -16,7 +16,7 @@ namespace SteamLibraryCapstoneProject
         // time and money you have wasted.
         // Author: Devon Kleinschmit
         // Date Created: 11/28/2018
-        // Last Modified: 12/4/2018
+        // Last Modified: 12/7/2018
         //********************
 
         static void Main(string[] args)
@@ -29,7 +29,7 @@ namespace SteamLibraryCapstoneProject
 
         static void DisplayMainMenu()
         {
-            string dataPath = @"Data\DataFile1.txt";
+            // string dataPath = @"Data\DataFile1.txt";
             string menuChoice;
             bool exiting = false;
             List<SteamGame> steamGames = new List<SteamGame>();
@@ -41,8 +41,8 @@ namespace SteamLibraryCapstoneProject
                 Console.WriteLine("\tB) Add to The List");
                 Console.WriteLine("\tC) Delete a Steam Game");
                 Console.WriteLine("\tD) Display Detailed Info");
-                Console.WriteLine("\tE) Save List to File");
-                Console.WriteLine("\tF) Read List from File");
+                //Console.WriteLine("\tE) Save List to File");
+                //Console.WriteLine("\tF) Read List from File");
                 Console.WriteLine("");
                 Console.WriteLine("\tQ) Quit");
                 Console.WriteLine("");
@@ -70,15 +70,15 @@ namespace SteamLibraryCapstoneProject
                         DisplaySteamGameInfo(steamGames);
                         break;
 
-                    case "E":
-                    case "e":
-                        DisplayWriteToFile(steamGames, dataPath);
-                        break;
+                    //case "E":
+                    //case "e":
+                    //    DisplayWriteToFile(steamGames, dataPath);
+                    //    break;
 
-                    case "F":
-                    case "f":
-                        DisplayReadFromFile(steamGames, dataPath);
-                        break;
+                    //case "F":
+                    //case "f":
+                    //    DisplayReadFromFile(steamGames, dataPath);
+                    //    break;
 
                     case "Q":
                     case "q":
@@ -92,124 +92,193 @@ namespace SteamLibraryCapstoneProject
 
         }
 
-        static void DisplayReadFromFile(List<SteamGame> steamGames, string dataPath)
-        {
-            string dataInfo;
-            Console.Clear();
-            dataInfo = File.ReadAllText(dataPath);
-            Console.WriteLine(dataInfo);
-            DisplayContinuePrompt();
-        }
+        //static void DisplayReadFromFile(List<SteamGame> steamGames, string dataPath)
+        //{
+        //    string dataInfo;
+        //    Console.Clear();
+        //    dataInfo = File.ReadAllText(dataPath);
+        //    Console.WriteLine(dataInfo);
+        //    DisplayContinuePrompt();
+        //}
 
-        static void DisplayWriteToFile(List<SteamGame> steamGames, string dataPath)
-        {
+        //static void DisplayWriteToFile(List<SteamGame> steamGames, string dataPath)
+        //{
 
-            Console.WriteLine("Writing to file.");
-            File.WriteAllText(dataPath, steamGames);
-            Console.WriteLine("Successful");
+        //    Console.WriteLine("Writing to file.");
+        //    File.WriteAllText(dataPath, steamGames);
+        //    Console.WriteLine("Successful");
 
-            DisplayContinuePrompt();
-        }
+        //    DisplayContinuePrompt();
+        //}
 
         static void DisplaySteamGameInfo(List<SteamGame> steamGames)
         {
-            DisplayHeader("In Depth Steam Game Info");
-            
-            foreach (SteamGame steamGame in steamGames)
-            {
-                Console.WriteLine(steamGame.Name);
-            }
-            Console.WriteLine();
-            Console.Write("Enter Name:");
-            string steamGameName = Console.ReadLine();
-
+            bool runApp = true;
             bool found = false;
-            
-            foreach (SteamGame steamGame in steamGames)
+            string userResponse;
+            while (runApp)
             {
-                if (steamGame.Name == steamGameName)
-                {
-                    Console.WriteLine("Genre:" + steamGame.CurrentGameGenre.ToString().PadLeft(10));
-                    Console.WriteLine("Price:" + steamGame.Price.ToString("C").PadLeft(10));
-                    Console.WriteLine("Hours:" + steamGame.Hours.ToString().PadLeft(10));
-                    found = true;
-                    break;
-                }
-            }
-            if (!found)
-            {
-                Console.WriteLine($"Unable to locate Steam Game named {steamGameName}.");
-            }
+                
+                DisplayHeader("In Depth Steam Game Info");
 
-            DisplayContinuePrompt();
+                foreach (SteamGame steamGame in steamGames)
+                {
+                    Console.WriteLine(steamGame.Name);
+                }
+                Console.WriteLine();
+                Console.Write("Enter Name:");
+                string steamGameName = Console.ReadLine();
+
+                foreach (SteamGame steamGame in steamGames)
+                {
+                    if (steamGame.Name == steamGameName)
+                    {
+                        Console.WriteLine("Genre:" + steamGame.CurrentGameGenre.ToString().PadLeft(10));
+                        Console.WriteLine("Price:" + steamGame.Price.ToString("C").PadLeft(10));
+                        Console.WriteLine("Hours:" + steamGame.Hours.ToString().PadLeft(10));
+                        found = true;
+                        Console.WriteLine();
+                        break;
+                        
+                    }
+                }
+                if (!found)
+                {
+                    Console.WriteLine($"Unable to locate Steam Game named {steamGameName}.");
+                    DisplayContinuePrompt();
+                }
+                Console.WriteLine("Would you like to search again?");
+                Console.WriteLine("Yes or No");
+                userResponse = Console.ReadLine();
+
+                if (userResponse.ToLower() == "yes")
+                {
+                    runApp = true;
+ 
+                }
+                else
+                {
+                    runApp = false;
+                    
+                }
+                Console.Clear();
+                
+            }
         }
 
         static void DisplayDeleteSteamGame(List<SteamGame> steamGames)
         {
-            DisplayHeader("Delete a Steam Game");
-
-
-            foreach (SteamGame steamGame in steamGames)
+            bool deleteLoop = true;
+            
+            string userResponse;
+            while (deleteLoop)
             {
-                Console.WriteLine(steamGame.Name);
-            }
-            Console.WriteLine();
-            Console.Write("Enter Name:");
-            string steamGameName = Console.ReadLine();
+                DisplayHeader("Delete a Steam Game");
 
-            bool found = false;
-            foreach (SteamGame steamGame in steamGames)
-            {
-                if (steamGame.Name == steamGameName)
+                foreach (SteamGame steamGame in steamGames)
                 {
-                    steamGames.Remove(steamGame);
-                    found = true;
-                    break;
+                    Console.WriteLine(steamGame.Name);
                 }
-            }
+                Console.WriteLine();
+                Console.Write("Enter Name:");
+                string steamGameName = Console.ReadLine();
 
-            if (!found)
-            {
-                Console.WriteLine($"Can not locate: {steamGameName}.");
-            }
+                bool found = false;
+                foreach (SteamGame steamGame in steamGames)
+                {
+                    if (steamGame.Name == steamGameName)
+                    {
+                        steamGames.Remove(steamGame);
+                        found = true;
+                        break;
+                    }
+                }
 
-            DisplayContinuePrompt();
+                if (!found)
+                {
+                    Console.WriteLine($"Can not locate: {steamGameName}.");
+                }
+                Console.WriteLine("Would you like to delete another game?");
+                Console.WriteLine("Yes or No");
+                userResponse = Console.ReadLine();
+
+                if (userResponse.ToLower() == "yes")
+                {
+                    deleteLoop = true;
+
+                }
+                else
+                {
+                    deleteLoop = false;
+
+                }
+                Console.Clear();
+
+              
+            }
         }
+            
 
         static void DisplayAddSteamGame(List<SteamGame> steamGames)
         {
             SteamGame userSteamGame = new SteamGame();
-
-            DisplayHeader("Add a Steam Game");
-
-            Console.Write("Enter Name:");
-            userSteamGame.Name = Console.ReadLine();
-
-            Console.WriteLine();
-            Console.WriteLine("Game Genres:");
-            foreach (string genreName in Enum.GetNames(typeof(SteamGame.GameGenre)))
+            bool runApp = true;
+            string userResponse;
+            while (runApp)
             {
-                if (genreName != SteamGame.GameGenre.unknown.ToString())
+                DisplayHeader("Add a Steam Game");
+
+                Console.Write("Enter Name:");
+                userSteamGame.Name = Console.ReadLine();
+
+                Console.WriteLine();
+                Console.WriteLine("Game Genres:");
+                foreach (string genreName in Enum.GetNames(typeof(SteamGame.GameGenre)))
                 {
-                    Console.WriteLine(genreName);
+                    if (genreName != SteamGame.GameGenre.unknown.ToString())
+                    {
+                        Console.WriteLine(genreName);
+                    }
                 }
+
+                Console.WriteLine();
+                Console.Write("Enter Genre:");
+                Enum.TryParse(Console.ReadLine().ToLower(), out SteamGame.GameGenre genre);
+                userSteamGame.CurrentGameGenre = genre;
+
+                Console.WriteLine(genre);
+
+                Console.Write("Enter Price:");
+                double.TryParse(Console.ReadLine(), out double price);
+                userSteamGame.Price = price;
+
+                Console.Write("Enter Hours Played:");
+                int.TryParse(Console.ReadLine(), out int hours);
+                userSteamGame.Hours = hours;
+
+                steamGames.Add(userSteamGame);
+
+                Console.WriteLine("Would you like to add another game?");
+                Console.WriteLine("Yes or No");
+                userResponse = Console.ReadLine();
+
+                if (userResponse.ToLower() == "yes")
+                {
+                    runApp = true;
+
+                }
+                else
+                {
+                    runApp = false;
+
+                }
+                Console.Clear();
             }
 
-            Console.WriteLine();
-            Console.Write("Enter Genre:");
-            Enum.TryParse(Console.ReadLine().ToLower(), out SteamGame.GameGenre genre);
-            userSteamGame.CurrentGameGenre = genre;
 
-            Console.Write("Enter Price:");
-            double.TryParse(Console.ReadLine(), out double price);
-            userSteamGame.Price = price;
-
-            Console.Write("Enter Hours Played:");
-            int.TryParse(Console.ReadLine(), out int hours);
-            userSteamGame.Hours = hours;
-
-            steamGames.Add(userSteamGame);
         }
+
+
             static void DisplayAllSteamGames(List<SteamGame> steamGames)
             {
             
