@@ -9,15 +9,14 @@ namespace SteamLibraryCapstoneProject
 {
     class Program
     {
-        //********************
+        //********************************************
         // Title: Capstone Project CIT 110
         // Application type: .net Framework C#
-        // Description: The pupose of this app is to organize your steam library into value and hours played to see how much 
-        // time and money you have wasted.
+        // Description: The pupose of this app is to organize your steam library into value and hours played.
         // Author: Devon Kleinschmit
         // Date Created: 11/28/2018
-        // Last Modified: 12/7/2018
-        //********************
+        // Last Modified: 12/9/2018
+        //********************************************
 
         static void Main(string[] args)
         {
@@ -107,7 +106,6 @@ namespace SteamLibraryCapstoneProject
         //    Console.WriteLine("Writing to file.");
         //    File.WriteAllText(dataPath, steamGames);
         //    Console.WriteLine("Successful");
-
         //    DisplayContinuePrompt();
         //}
 
@@ -245,8 +243,6 @@ namespace SteamLibraryCapstoneProject
                 Console.Write("Enter Genre:");
                 Enum.TryParse(Console.ReadLine().ToLower(), out SteamGame.GameGenre genre);
                 userSteamGame.CurrentGameGenre = genre;
-
-                Console.WriteLine(genre);
 
                 Console.Write("Enter Price:");
                 double.TryParse(Console.ReadLine(), out double price);
